@@ -8,9 +8,16 @@ app.use(cors({ optionsSuccessStatus: 200 }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  console.log(req.header("user-agent"), req.socket.remoteAddress);
   res.sendFile(__dirname + "/views/index.html");
 });
+
+app.get("/api/whoami", (req, res) => {
+  const ip = req.socket.remoteAddress
+  const language = req.header("accept-language");
+  const software = req.header("user-agent");
+
+  res.json({ ipaddress: ip, language: language, software: software });
+})
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log(`Your app is hosted on localhost:${listener.address().port}`);
